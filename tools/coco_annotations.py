@@ -6,8 +6,7 @@ import argparse
 
 def get_contours(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    ret, thresh = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY)
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     return contours
 
@@ -15,8 +14,7 @@ def get_boundings(img):
     contours = get_contours(img)
     bounding_boxes = []
     for i in range(len(contours)):
-        contour_polygons = cv2.approxPolyDP(contours[i], 3, True)
-        bounding_box = cv2.boundingRect(contour_polygons)
+        bounding_box = cv2.boundingRect(contours[i])
         bounding_boxes.append(bounding_box)
 
     return bounding_boxes
@@ -99,7 +97,7 @@ def generate_COCO(args):
 
     assert path_to_AIRS.exists() and path_to_AIRS.is_dir(), f'Invalid directory path {path_to_AIRS}.'
     assert outputfile.exists(), f'No JSON file provided with path {outputfile}'
-    
+
     path_to_masks = path_to_AIRS / 'masks'
     path_to_images = path_to_AIRS / 'images'
 
