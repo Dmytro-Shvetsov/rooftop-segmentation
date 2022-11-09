@@ -42,7 +42,7 @@ def main(args):
     output_dir.mkdir(exist_ok=True, parents=True)
 
     img_size = read_image(image_paths[0]).shape[:2]
-    size = calculate_dataset_size(len(image_paths), img_size, args.tile_size, args.stride, 7 if args.deep_watershed_transform else 4)
+    size = calculate_dataset_size(len(image_paths), img_size, args.tile_size, args.stride, 4)
     # print(size)
     # exit()
     # saver = LMDB(output_dir, memsize=1e+9) if args.format.lower() == 'lmdb' else None
