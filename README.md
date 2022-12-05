@@ -12,9 +12,9 @@ python tools/create_images_dataset.py -id {path to images} -ad {path to masks} -
 
 # **COCO annotations** 
 
-python tools/coco_annotations.py -i  airs_proto/train -o airs_proto/train_annotations.json --minimize <br>
-python tools/coco_annotations.py -i  airs_proto/val -o airs_proto/val_annotations.json --minimize <br>
-python tools/coco_annotations.py -i  airs_proto/test -o airs_proto/test_annotations.json --minimize <br>
+python tools/coco_annotations.py -i data/airs_proto/train -o data/airs_proto/train_annotations.json --minimize <br>
+python tools/coco_annotations.py -i data/airs_proto/val -o data/airs_proto/val_annotations.json --minimize <br>
+python tools/coco_annotations.py -i data/airs_proto/test -o data/airs_proto/test_annotations.json --minimize <br>
 
 **Arguments:**
 

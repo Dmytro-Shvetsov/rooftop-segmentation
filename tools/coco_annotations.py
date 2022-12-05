@@ -37,7 +37,7 @@ def images_to_dict(imgs_path):
         h, w = get_size(img)
         file = {
             'id': i,
-            'filename': imgs_path[i].parts[-2] + '/' + imgs_path[i].parts[-1],
+            'file_name': imgs_path[i].parts[-2] + '/' + imgs_path[i].parts[-1],
             'width': w,
             'height': h,
         }
@@ -53,11 +53,14 @@ def annotations_to_dict(msks_path):
         contours = get_contours(mask)
         bbox = get_boundings(contours)
         for i in range(len(contours)):
+            # https://github.com/cocodataset/cocoapi/issues/139
+            if len(contours[i]) <= 2:
+                continue
             stats = {
                 'id': counter,
                 'segmentation': [flatten_contour_coordinates(contours[i])],
                 'area': cv2.contourArea(contours[i]),
-                'is_crowd': 0,
+                'iscrowd': 0,
                 'image_id': j,
                 'bbox': bbox[i],
                 'category_id': 0,
