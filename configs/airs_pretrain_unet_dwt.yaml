@@ -1,0 +1,161 @@
+seed: 42
+device: cuda:0
+num_workers: 14
+run_name: dwt
+experiment_version: airs25cm_ur50_focal_dwt_norm_fp16_rgb_384x384
+
+dataset_dir: data/airs_proto_dwt
+image_size: !!python/tuple [384, 384]
+batch_size: 32
+
+# 25cm scale AIRS dataset
+means: !!python/tuple [0.43472685, 0.44075968, 0.40805691]
+stds: !!python/tuple [0.2185626 , 0.20744645, 0.21260799]
+
+# Classes of the network
+classes: ['Roof']
+
+logs_dir: './training_logs'
+vis_settings:
+  vis_frequency: 20
+  n_vis_images: 3
+  image_size: [1536, 1536]
+  tile_sep: 0 
+  mode: watershed_energy
+
+model:
+  type: WatershedEnergyLitModel
+
+trainer:
+  type: pytorch_lightning.Trainer
+  gpus: 1
+  # profiler: simple
+  max_epochs: 300
+  check_val_every_n_epoch: 1
+  precision: 16
+
+metrics:
+  - type: src.metrics.IoU
+  - type: src.metrics.TverskyScore
+  - type: src.metrics.Precision
+
+checkpoint_params:
+  save_top_k: 10
+  monitor: Validation/metrics/IoU_roof
+  mode: max
+  every_n_epochs: 1
+
+losses:
+  - 
+    type: segmentation_models_pytorch.losses.jaccard.JaccardLoss
+    weight: 0.1
+    mode: binary
+    smooth: 1
+    from_logits: True
+  -
+    # accepts logits by default
+    type: segmentation_models_pytorch.losses.FocalLoss
+    weight: 0.9
+    mode: binary
+    gamma: 2
+
+optimizer:
+  type: torch.optim.Adam
+  # betas: [0.5, 0.999]
+  betas: [0.9, 0.999]
+  lr: 0.0001
+
+scheduler:
+  type: torch.optim.lr_scheduler.MultiStepLR
+  milestones: [200, 250]
+  gamma: 0.5
+
+# Training augmentations pipeline based on albumentations library https://github.com/albumentations-team/albumentations
+train_aug:
+  __version__: 1.1.0
+  transform:
+    __class_fullname__: Compose
+    additional_targets: {}
+    bbox_params: null
+    keypoint_params: null
+    p: 1.0
+    transforms:
+    - __class_fullname__: RandomCrop
+      always_apply: false
+      height: 384
+      p: 1.0
+      width: 384
+    - __class_fullname__: OneOf
+      p: 0.8
+      transforms:
+      - __class_fullname__: HueSaturationValue
+        always_apply: false
+        hue_shift_limit: !!python/tuple
+        - -10
+        - 10
+        p: 1.0
+        sat_shift_limit: !!python/tuple
+        - -30
+        - 30
+        val_shift_limit: !!python/tuple
+        - -20
+        - 20
+      - __class_fullname__: ImageCompression
+        always_apply: false
+        compression_type: 0
+        p: 1.0
+        quality_lower: 60
+        quality_upper: 100
+    - __class_fullname__: OneOf
+      p: 0.8
+      transforms:
+      - __class_fullname__: RandomFog
+        alpha_coef: 0.08
+        always_apply: false
+        fog_coef_lower: 0.05
+        fog_coef_upper: 0.3
+        p: 1.0
+      - __class_fullname__: GaussianBlur
+        always_apply: false
+        blur_limit: !!python/tuple
+        - 1
+        - 3
+        p: 0.5
+        sigma_limit: !!python/tuple
+        - 0
+        - 0
+    - __class_fullname__: RandomBrightnessContrast
+      always_apply: false
+      brightness_by_max: true
+      brightness_limit: !!python/tuple
+      - -0.2
+      - 0.1
+      contrast_limit: !!python/tuple
+      - -0.1
+      - 0.1
+      p: 0.8
+    - __class_fullname__: GaussNoise
+      always_apply: false
+      mean: 0
+      p: 1.0
+      per_channel: true
+      var_limit: !!python/tuple
+      - 10
+      - 50
+    - __class_fullname__: HorizontalFlip
+      always_apply: false
+      p: 0.5
+    - __class_fullname__: VerticalFlip
+      always_apply: false
+      p: 0.5
+    - __class_fullname__: Rotate
+      always_apply: false
+      border_mode: 4
+      interpolation: 0
+      limit: !!python/tuple
+      - 60
+      - 300
+      mask_value: null
+      p: 1.0
+      value: null
+

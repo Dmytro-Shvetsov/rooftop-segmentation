@@ -1,9 +1,9 @@
+import cv2
+import numpy as np
 from pathlib import Path
 from typing import Callable, Optional, List, Union
 from multiprocessing.pool import Pool
 from albumentations import pad_with_params
-import cv2
-import numpy as np
 from logging import getLogger
 
 
