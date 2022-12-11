@@ -134,7 +134,7 @@ class WatershedEnergyLitModel(pl.LightningModule, SegmentationModelInterface):
     def _step(self, batch, log_prefix, metrics=False):
         img, semg, wngy = batch
 
-        wngy = wngy.permute(0, 3, 1, 2).long().squeeze()
+        wngy = wngy.permute(0, 3, 1, 2).long().squeeze(1)
         semg = semg.permute(0, 3, 1, 2)
 
         img = self.preprocess_inputs(img)

@@ -20,4 +20,3 @@ logs_dir: './inference_logs/dwt_final'
 
 segmentation:
   type: WatershedEnergyLitModel
-  model_ckpt: training_logs/dwt/airs25cm_ur50_focal_dwt_norm_fp16_rgb_384x384/checkpoints/epoch=167-step=78623.ckpt

@@ -12,6 +12,7 @@ batch_size: 32
 means: !!python/tuple [0.43472685, 0.44075968, 0.40805691]
 stds: !!python/tuple [0.2185626 , 0.20744645, 0.21260799]
 
+model_ckpt: training_logs/dwt/airs25cm_ur50_focal_dwt_norm_fp16_rgb_384x384/checkpoints/epoch=243-step=114191.ckpt
 # Classes of the network
 classes: ['Roof']
 
