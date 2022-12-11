@@ -33,6 +33,7 @@ trainer:
   max_epochs: 300
   check_val_every_n_epoch: 1
   precision: 16
+  resume_from_checkpoint: training_logs/dwt/airs25cm_ur50_focal_dwt_norm_fp16_rgb_384x384/checkpoints/epoch=117-step=55223.ckpt
 
 metrics:
   - type: src.metrics.IoU

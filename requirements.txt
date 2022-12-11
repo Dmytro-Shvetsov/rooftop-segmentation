@@ -1,0 +1,11 @@
+albumentations==1.1.0
+pytorch-lightning==1.5.2
+segmentation-models-pytorch==0.2.1
+tensorboard==2.7.0
+pytorch_toolbelt==0.4.4
+Pillow==8.4.0
+opencv-python==4.5.5.62
+scikit-image==0.19.3
+PyYAML==6.0
+tiffile
+matplotlib

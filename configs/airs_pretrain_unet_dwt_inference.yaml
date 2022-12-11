@@ -1,0 +1,23 @@
+seed: 42
+device: cuda:0
+num_workers: 0
+
+tile_size: !!python/tuple [512, 512]
+tile_step: !!python/tuple [128, 128]
+tile_weight: 'mean' # or pyramid
+batch_size: 8
+target_scale: 0.3
+object_min_size: 20
+energy_threshold: 1
+
+# 25cm scale AIRS dataset
+means: !!python/tuple [0.43472685, 0.44075968, 0.40805691]
+stds: !!python/tuple [0.2185626 , 0.20744645, 0.21260799]
+
+# Classes of the network
+classes: ['Roof']
+logs_dir: './inference_logs/dwt_final'
+
+segmentation:
+  type: WatershedEnergyLitModel
+  model_ckpt: training_logs/dwt/airs25cm_ur50_focal_dwt_norm_fp16_rgb_384x384/checkpoints/epoch=167-step=78623.ckpt

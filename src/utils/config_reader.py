@@ -5,11 +5,13 @@ import pydoc
 from functools import reduce
 
 import yaml
+import shutil
 
 
 class Config:
 
     def __init__(self, file_path):
+        self._orig_fp = file_path
         self._load(file_path)
 
     def _load(self, file_path):
@@ -55,9 +57,6 @@ class Config:
     def clear(self):
         return self.__dict__.clear()
 
-    def copy(self):
-        return self.__dict__.copy()
-
     def has_key(self, k):
         return k in self.__dict__
 
@@ -70,11 +69,10 @@ class Config:
     def values(self):
         return self.__dict__.values()
 
-    def save(self, fp):
+    def copy(self, fp):
         if os.path.exists(fp):
             os.unlink(fp)
-        with open(fp, 'w') as fid:
-            yaml.dump(self, fid)
+        shutil.copy(self._orig_fp, fp)
 
     def __getattribute__(self, __name: str) -> Any:
         try:

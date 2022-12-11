@@ -33,7 +33,7 @@ python tools/create_images_dataset.py -id {path to images} -ad {path to masks} -
 python tools/train.py -c configs/airs_pretrain_unet_dwt.yaml
 ```
 
-### To be able to use mmdetection library, please refer to the original documentation of the library to [install](https://mmdetection.readthedocs.io/en/stable/get_started.html) the package inside the container.
+#### To be able to use mmdetection library, please refer to the original documentation of the library to [install](https://mmdetection.readthedocs.io/en/stable/get_started.html) the package inside the container.
 
 ## Generating COCO annotations (train/val/test)
 ```
@@ -52,8 +52,12 @@ Arguments:
 - -`od` JSON file to write to
 - `-m` Whether to minimize the output json file or not
 
-### Training [Point Rend](https://github.com/open-mmlab/mmdetection/tree/master/configs/point_rend)
+## Training [Point Rend](https://github.com/open-mmlab/mmdetection/tree/master/configs/point_rend)
 ```
 python mmdetection/tools/train.py configs/pointrend_r50.py
 ```
 
+# **Inferencing a folder of GeoTiff images with DWT model**
+```
+python tools/inference_geotiff.py -c configs/airs_pretrain_unet_dwt_inference.yaml -id data/inference_examples/
+```

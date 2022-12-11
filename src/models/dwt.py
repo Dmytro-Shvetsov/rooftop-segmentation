@@ -134,10 +134,8 @@ class WatershedEnergyLitModel(pl.LightningModule, SegmentationModelInterface):
     def _step(self, batch, log_prefix, metrics=False):
         img, semg, wngy = batch
 
-        # uvec = uvec.permute(0, 3, 1, 2)
         wngy = wngy.permute(0, 3, 1, 2).long().squeeze()
         semg = semg.permute(0, 3, 1, 2)
-        # area = area.permute(0, 3, 1, 2)
 
         img = self.preprocess_inputs(img)
         y_hat = self(img)
@@ -149,7 +147,6 @@ class WatershedEnergyLitModel(pl.LightningModule, SegmentationModelInterface):
             err = weight * loss(y_hat[:, 0].unsqueeze(1), semg.squeeze(1))
             total_loss += err
             self.log(f'{log_prefix}/semseg_losses/{loss_name}', err, logger=True, on_step=False, on_epoch=True)
-            # self.log('train_semseg_'+loss_name, err, logger=True, on_step=False, on_epoch=True)
 
         # watershed energies loss
         for loss_name, (weight, loss) in self._wsgy_losses.items():
@@ -157,8 +154,6 @@ class WatershedEnergyLitModel(pl.LightningModule, SegmentationModelInterface):
             total_loss += err
             self.log(f'{log_prefix}/wngy_losses/{loss_name}', err, logger=True, on_step=False, on_epoch=True)
 
-        # loss = self.train_loss(y_hat, wngy, semg, area)
-        # self.log('train_loss', total_loss, on_step=False, on_epoch=True)
         self.log(f'{log_prefix}/losses/total_loss', total_loss, on_step=True, on_epoch=True)
 
         if metrics:
